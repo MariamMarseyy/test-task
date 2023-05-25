@@ -1,0 +1,27 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:8.0.33
+    networks:
+      - test-task
+    environment:
+      MYSQL_ROOT_PASSWORD: 'tototo'
+    ports:
+      - "3306:3306"
+
+  nestjs-api:
+    image: testtask-api
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    networks:
+      - test-task
+    volumes:
+      - .:/usr/src/app
+
+networks:
+  test-task:
+    driver: bridge

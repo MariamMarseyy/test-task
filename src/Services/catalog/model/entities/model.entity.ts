@@ -4,6 +4,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  BeforeRemove,
 } from 'typeorm';
 import { Brand } from '../../brand/entities/brand.entity';
 import { Car } from '../../car/entities/car.entity';
@@ -21,4 +25,17 @@ export class Model {
 
   @OneToMany(() => Car, (car) => car.model)
   cars: Car[];
+  @CreateDateColumn({ name: 'created_at' })
+  created_at: Date;
+
+  @UpdateDateColumn({ default: null, type: 'datetime' })
+  updated_at?: Date;
+
+  @DeleteDateColumn({ nullable: true, name: 'deleted_at' })
+  deleted_at?: Date;
+
+  @BeforeRemove()
+  setDeletedAt() {
+    this.deleted_at = new Date();
+  }
 }
