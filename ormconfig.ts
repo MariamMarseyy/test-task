@@ -8,7 +8,7 @@ import { Brand } from './src/Services/catalog/brand/entities/brand.entity';
 export const connectionSource = new DataSource({
   migrationsTableName: 'migrations',
   type: 'mysql',
-  host: 'localhost',
+  host: 'mysqldb',
   port: 3306,
   username: 'root',
   password: 'tototo',
