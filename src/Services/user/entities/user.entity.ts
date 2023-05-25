@@ -15,7 +15,7 @@ import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column()
   name: string;

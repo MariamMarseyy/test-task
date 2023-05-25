@@ -34,39 +34,17 @@ export class CreateBrandTable1684952161241 implements MigrationInterface {
             type: 'varchar',
             length: '255',
           },
+          {
+            name: 'isApproved',
+            type: 'boolean',
+          },
         ],
       }),
       true,
     );
-
-    await queryRunner.addColumn(
-      'model',
-      new TableColumn({
-        name: 'brandId',
-        type: 'int',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'model',
-      new TableForeignKey({
-        columnNames: ['brandId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'brand',
-        onDelete: 'CASCADE',
-      }),
-    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const modelTable = await queryRunner.getTable('model');
-    const foreignKey = modelTable.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('brandId') !== -1,
-    );
-    await queryRunner.dropForeignKey('model', foreignKey);
-
-    await queryRunner.dropColumn('model', 'brandId');
-
     await queryRunner.dropTable('brand');
   }
 }

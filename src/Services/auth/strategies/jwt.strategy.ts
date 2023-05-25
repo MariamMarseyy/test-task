@@ -11,13 +11,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      passReqToCallback: true,
+      // passReqToCallback: true,
       ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     });
   }
 
-  async validate(payload: IJwtPayload) {
+  async validate(payload: any) {
     return {
       id: payload.id,
       email: payload.email,

@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
@@ -18,22 +19,31 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {
       'isPublic',
       context.getHandler(),
     );
-    if (isPublic) return true;
-    const isTokenValid = (await super.canActivate(context)) as boolean;
-    const isVerified = context.switchToHttp().getRequest().user.verified;
-    if (isTokenValid) {
-      if (!isVerified) {
-        const isAllowUnverified = this._reflector.get<boolean>(
-          'allowUnverified',
-          context.getHandler(),
-        );
-        // if (!isAllowUnverified)
-        //   throw new ForbiddenException(
-        //     'Your account not confirmed yet by Admin',
-        //   );
-      }
-    }
 
+    if (isPublic) return true;
+
+    const isTokenValid = (await super.canActivate(context)) as boolean;
+    // const isVerified = context.switchToHttp().getRequest().user.verified;
+    // if (isTokenValid) {
+    //   if (!isVerified) {
+    //     const isAllowUnverified = this._reflector.get<boolean>(
+    //       'allowUnverified',
+    //       context.getHandler(),
+    //     );
+    //     if (!isAllowUnverified)
+    //       throw new ForbiddenException(
+    //         'Your account not confirmed yet by Admin',
+    //       );
+    //   }
+    // }
+    //
     return isTokenValid;
+  }
+  handleRequest(err, user, info) {
+    // You can throw an exception based on either "info" or "err" arguments
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+    return user;
   }
 }

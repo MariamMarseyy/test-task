@@ -10,4 +10,7 @@ export class CreateCarDto {
   @ApiProperty({ description: 'The ID of the model associated with the car.' })
   @IsNotEmpty({ message: 'Model ID is required' })
   modelId: number;
+
+  @ApiProperty({ description: 'The image file of the car.' })
+  image: any;
 }

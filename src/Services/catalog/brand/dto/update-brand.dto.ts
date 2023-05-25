@@ -5,6 +5,5 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class UpdateBrandDto extends CreateBrandDto {
   @ApiProperty({ description: 'The id of the brand.' })
   @IsNotEmpty({ message: 'id is required' })
-  @IsString()
-  id: string;
+  id: number;
 }

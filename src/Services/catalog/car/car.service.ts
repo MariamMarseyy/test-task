@@ -11,18 +11,29 @@ export class CarService {
     @InjectRepository(Car)
     private readonly carRepository: Repository<Car>,
   ) {}
-  async create(createCarDto: CreateCarDto) {
-    const newCar = await this.carRepository.create(createCarDto);
+  async create(createCarDto: CreateCarDto, image: Express.Multer.File) {
+    const newCar = this.carRepository.create(createCarDto);
+    newCar.image = image.filename;
+
     await this.carRepository.save(newCar);
 
     return newCar;
   }
 
-  async findAll() {
+  async findAll(brandId: number = null, modelId: number = null) {
+    if (brandId != null) {
+      if (modelId != null) {
+        return await this.carRepository.findBy({ modelId: modelId });
+      }
+      return await this.carRepository.find({
+        relations: { model: true },
+        where: { model: { brandId: brandId } },
+      });
+    }
     return await this.carRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const car = await this.carRepository.findOne({ where: { id } });
     if (car) {
       return car;
@@ -42,7 +53,7 @@ export class CarService {
     throw new HttpException('Car not found', HttpStatus.NOT_FOUND);
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const deletedCar = await this.carRepository.delete(id);
     if (!deletedCar.affected) {
       throw new HttpException('Car not found', HttpStatus.NOT_FOUND);

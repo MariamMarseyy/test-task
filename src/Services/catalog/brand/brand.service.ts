@@ -4,6 +4,7 @@ import { UpdateBrandDto } from './dto/update-brand.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Brand } from './entities/brand.entity';
+import { ROLES } from '../../../Common/Enums/user-types';
 
 @Injectable()
 export class BrandService {
@@ -11,8 +12,11 @@ export class BrandService {
     @InjectRepository(Brand)
     private readonly brandRepository: Repository<Brand>,
   ) {}
-  async create(createBrandDto: CreateBrandDto) {
+  async create(req: any, createBrandDto: CreateBrandDto) {
     const newBrand = await this.brandRepository.create(createBrandDto);
+    if (req.role === ROLES.ADMIN) {
+      newBrand.isApproved = true;
+    }
     await this.brandRepository.save(newBrand);
 
     return newBrand;
@@ -22,7 +26,7 @@ export class BrandService {
     return await this.brandRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const brand = await this.brandRepository.findOne({ where: { id } });
     if (brand) {
       return brand;
@@ -47,5 +51,10 @@ export class BrandService {
     if (!deletedBrand.affected) {
       throw new HttpException('Brand not found', HttpStatus.NOT_FOUND);
     }
+  }
+
+  async approve(id: number) {
+    const brand = await this.brandRepository.findOne({ where: { id } });
+    brand.isApproved = true;
   }
 }

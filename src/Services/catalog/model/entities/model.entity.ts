@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   BeforeRemove,
+  RelationId,
 } from 'typeorm';
 import { Brand } from '../../brand/entities/brand.entity';
 import { Car } from '../../car/entities/car.entity';
@@ -15,13 +16,16 @@ import { Car } from '../../car/entities/car.entity';
 @Entity()
 export class Model {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column()
   name: string;
 
   @ManyToOne(() => Brand, (brand) => brand.models)
   brand: Brand;
+
+  @RelationId((model: Model) => model.brand)
+  brandId: number;
 
   @OneToMany(() => Car, (car) => car.model)
   cars: Car[];

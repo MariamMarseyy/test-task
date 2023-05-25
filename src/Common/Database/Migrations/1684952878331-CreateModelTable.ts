@@ -5,8 +5,7 @@ import {
   TableColumn,
   TableForeignKey,
 } from 'typeorm';
-
-export class CreateModelTable1684952888659 implements MigrationInterface {
+export class CreateModelTable1684952878331 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -28,27 +27,13 @@ export class CreateModelTable1684952888659 implements MigrationInterface {
             name: 'brandId',
             type: 'int',
           },
+          {
+            name: 'isApproved',
+            type: 'boolean',
+          },
         ],
       }),
       true,
-    );
-
-    await queryRunner.addColumn(
-      'car',
-      new TableColumn({
-        name: 'modelId',
-        type: 'int',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'car',
-      new TableForeignKey({
-        columnNames: ['modelId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'model',
-        onDelete: 'CASCADE',
-      }),
     );
 
     await queryRunner.createForeignKey(
@@ -63,20 +48,11 @@ export class CreateModelTable1684952888659 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const carTable = await queryRunner.getTable('car');
-    const foreignKeyCar = carTable.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('modelId') !== -1,
-    );
-    await queryRunner.dropForeignKey('car', foreignKeyCar);
-
     const modelTable = await queryRunner.getTable('model');
     const foreignKeyModel = modelTable.foreignKeys.find(
       (fk) => fk.columnNames.indexOf('brandId') !== -1,
     );
     await queryRunner.dropForeignKey('model', foreignKeyModel);
-
-    await queryRunner.dropColumn('car', 'modelId');
-
     await queryRunner.dropTable('model');
   }
 }

@@ -7,6 +7,8 @@ import {
   Delete,
   Put,
   UseGuards,
+  Req,
+  Patch,
 } from '@nestjs/common';
 import { BrandService } from './brand.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
@@ -19,14 +21,15 @@ import { ROLES } from '../../../Common/Enums/user-types';
 
 @Controller('brand')
 @ApiTags('brand')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth()
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}
 
   @Post()
-  @Roles(ROLES.ADMIN)
-  async create(@Body() createBrandDto: CreateBrandDto) {
-    return await this.brandService.create(createBrandDto);
+  @UseGuards(JwtAuthGuard)
+  // @Roles(ROLES.ADMIN)
+  async create(@Req() req, @Body() createBrandDto: CreateBrandDto) {
+    return await this.brandService.create(req.user, createBrandDto);
   }
 
   @Get()
@@ -36,16 +39,27 @@ export class BrandController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.brandService.findOne(id);
+    return await this.brandService.findOne(+id);
   }
 
   @Put()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN)
   update(@Body() updateBrandDto: UpdateBrandDto) {
     return this.brandService.update(updateBrandDto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN)
   remove(@Param('id') id: string) {
     return this.brandService.remove(id);
+  }
+
+  @Patch('approve/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLES.ADMIN)
+  approveBrand(@Param('id') id: string) {
+    return this.brandService.approve(+id);
   }
 }

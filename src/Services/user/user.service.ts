@@ -44,7 +44,7 @@ export class UserService {
       },
     });
   }
-  async validateUser(id: string): Promise<User> {
+  async validateUser(id: number): Promise<User> {
     const options: FindOneOptions<User> = {
       where: { id },
     };

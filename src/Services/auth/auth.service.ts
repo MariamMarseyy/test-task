@@ -85,7 +85,7 @@ export class AuthService {
   }
 
   public async validateUser(payload: IJwtPayload): Promise<User> {
-    return await this.userService.validateUser(payload.id);
+    return await this.userService.validateUser(+payload.id);
   }
   /**
    * @description  Validate JWT

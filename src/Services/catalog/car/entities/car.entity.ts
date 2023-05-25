@@ -7,19 +7,27 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   BeforeRemove,
+  RelationId,
 } from 'typeorm';
 import { Model } from '../../model/entities/model.entity';
 
 @Entity()
 export class Car {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column()
   name: string;
 
   @ManyToOne(() => Model, (model) => model.cars)
   model: Model;
+
+  @RelationId((car: Car) => car.model)
+  modelId: number;
+
+  @Column()
+  image: any;
+
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 

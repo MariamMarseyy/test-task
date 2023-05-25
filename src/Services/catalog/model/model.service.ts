@@ -22,7 +22,7 @@ export class ModelService {
     return await this.modelRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const model = await this.modelRepository.findOne({ where: { id } });
     if (model) {
       return model;

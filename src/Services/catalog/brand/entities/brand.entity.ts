@@ -13,7 +13,7 @@ import { Model } from '../../model/entities/model.entity';
 @Entity()
 export class Brand {
   @PrimaryGeneratedColumn('increment')
-  id: string;
+  id: number;
 
   @Column()
   name: string;
@@ -23,6 +23,9 @@ export class Brand {
 
   @Column()
   logoUrl: string;
+
+  @Column()
+  isApproved: boolean;
 
   @OneToMany(() => Model, (model) => model.brand)
   models: Model[];

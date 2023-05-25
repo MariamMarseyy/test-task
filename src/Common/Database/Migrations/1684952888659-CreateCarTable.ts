@@ -5,7 +5,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class CreateCarTable1684952878331 implements MigrationInterface {
+export class CreateCarTable1684952888659 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -26,6 +26,16 @@ export class CreateCarTable1684952878331 implements MigrationInterface {
           {
             name: 'modelId',
             type: 'int',
+          },
+          {
+            name: 'isApproved',
+            type: 'boolean',
+          },
+          {
+            name: 'image',
+            type: 'varchar',
+            length: '255',
+            isNullable: true,
           },
         ],
       }),
@@ -49,7 +59,6 @@ export class CreateCarTable1684952878331 implements MigrationInterface {
       (fk) => fk.columnNames.indexOf('modelId') !== -1,
     );
     await queryRunner.dropForeignKey('car', foreignKey);
-
     await queryRunner.dropTable('car');
   }
 }
