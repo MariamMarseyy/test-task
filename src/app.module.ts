@@ -26,7 +26,7 @@ import * as multer from 'multer';
       host: process.env.DATABASE_HOST,
       port: 3306,
       username: 'root',
-      password: 'Dennis2001!',
+      password: 'tototo',
       database: 'task',
       entities: [User, Model, Car, Brand],
       migrations: [
