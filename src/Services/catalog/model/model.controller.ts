@@ -10,8 +10,11 @@ import {
 import { ModelService } from './model.service';
 import { CreateModelDto } from './dto/create-model.dto';
 import { UpdateModelDto } from './dto/update-model.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('model')
+@ApiBearerAuth()
+@ApiTags('model')
 export class ModelController {
   constructor(private readonly modelService: ModelService) {}
 

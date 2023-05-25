@@ -4,9 +4,9 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthRequestDto, SignUpDto } from './dto/auth.dto';
 import { IAuthResponse } from '../../Common/Interfaces/auth/IAuthResponse';
 import { IAuthMessage } from '../../Common/Interfaces/auth/IAuthMessage';
+import { IsPublic } from '../../Common/Decorators/is-public.decorator';
 @ApiTags('Auth')
 @Controller('auth')
-@ApiBearerAuth()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   /**
@@ -14,6 +14,7 @@ export class AuthController {
    * @param signUpDto
    */
   @Post('sign-up')
+  @IsPublic()
   @ApiOperation({ summary: 'Registration' })
   async signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
@@ -24,6 +25,7 @@ export class AuthController {
    */
 
   @Post('login')
+  @IsPublic()
   @ApiOperation({ summary: 'Log in to system' })
   public async login(
     @Body() credential: AuthRequestDto,

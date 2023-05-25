@@ -8,20 +8,20 @@ import { IJwtPayload } from '../../../Common/Interfaces/auth/IJwtPayload';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly _authService: AuthService) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      passReqToCallback: true,
+      ignoreExpiration: false,
       secretOrKey: jwtConstants.secret,
     });
   }
 
-  async validate(payload: IJwtPayload, done: VerifiedCallback) {
-    const user: User = await this._authService.validateUser(payload);
-
-    if (!user) {
-      return done(new UnauthorizedException('Token is invalid'), false);
-    }
-    (<any>user).verified = !payload?.notVerified;
-    return done(null, user, payload.iat);
+  async validate(payload: IJwtPayload) {
+    return {
+      id: payload.id,
+      email: payload.email,
+      role: payload.role,
+    };
   }
 }

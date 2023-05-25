@@ -66,6 +66,7 @@ export class AuthService {
     const jwtPayload: IJwtPayload = {
       id: user.id,
       email: user.email,
+      role: user.role,
       iat: new Date().getTime() / 1000,
     };
     const accessToken = this.jwtService.sign(jwtPayload, {
@@ -83,16 +84,26 @@ export class AuthService {
     };
   }
 
-  /**
-   * @description  Validate User Decoded From JWT
-   */
   public async validateUser(payload: IJwtPayload): Promise<User> {
     return await this.userService.validateUser(payload.id);
   }
-  // /**
-  //  * @description  Validate JWT
-  //  */
-  // public async verifyJwt(token: string): Promise<any> {
-  //   return this._jwtService.verifyAsync(token);
-  // }
+  /**
+   * @description  Validate JWT
+   */
+  public async verifyJwt(token: string): Promise<any> {
+    return this.jwtService.verifyAsync(token);
+  }
+
+  public decodeToken(token: string): IJwtPayload | null {
+    try {
+      let _token;
+      if (token) {
+        _token = token.split(' ')[1];
+      }
+      return this.jwtService.decode(_token) as IJwtPayload;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
 }

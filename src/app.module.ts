@@ -14,6 +14,8 @@ import { CreateBrandTable1684952161241 } from './Common/Database/Migrations/1684
 import { CreateCarTable1684952878331 } from './Common/Database/Migrations/1684952878331-CreateCarTable';
 import { CreateModelTable1684952888659 } from './Common/Database/Migrations/1684952888659-CreateModelTable';
 import * as process from 'process';
+import { JwtAuthGuard } from './Common/Guards/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -38,6 +40,12 @@ import * as process from 'process';
     CatalogModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('car')
+@ApiBearerAuth()
+@ApiTags('car')
 export class CarController {
   constructor(private readonly carService: CarService) {}
 
@@ -19,16 +30,16 @@ export class CarController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.carService.findOne(+id);
+    return this.carService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto) {
-    return this.carService.update(+id, updateCarDto);
+  @Put(':id')
+  update(updateCarDto: UpdateCarDto) {
+    return this.carService.update(updateCarDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.carService.remove(+id);
+    return this.carService.remove(id);
   }
 }
