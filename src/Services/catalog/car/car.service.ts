@@ -4,6 +4,7 @@ import { UpdateCarDto } from './dto/update-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Car } from './entities/car.entity';
+import * as fs from 'fs';
 
 @Injectable()
 export class CarService {
@@ -13,8 +14,7 @@ export class CarService {
   ) {}
   async create(createCarDto: CreateCarDto, image: Express.Multer.File) {
     const newCar = this.carRepository.create(createCarDto);
-    newCar.image = image.filename;
-
+    newCar.imageUrl = image.filename;
     await this.carRepository.save(newCar);
 
     return newCar;

@@ -25,8 +25,8 @@ export class Car {
   @RelationId((car: Car) => car.model)
   modelId: number;
 
-  @Column()
-  image: any;
+  @Column({ default: '' })
+  imageUrl: string;
 
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;

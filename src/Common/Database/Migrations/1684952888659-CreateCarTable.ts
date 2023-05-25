@@ -32,10 +32,11 @@ export class CreateCarTable1684952888659 implements MigrationInterface {
             type: 'boolean',
           },
           {
-            name: 'image',
+            name: 'imageUrl',
             type: 'varchar',
             length: '255',
             isNullable: true,
+            default: '',
           },
         ],
       }),

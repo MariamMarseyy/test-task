@@ -17,7 +17,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { CreateModelTable1684952878331 } from './Common/Database/Migrations/1684952878331-CreateModelTable';
 import { CreateCarTable1684952888659 } from './Common/Database/Migrations/1684952888659-CreateCarTable';
 import { MulterModule } from '@nestjs/platform-express';
-import multer from 'multer';
+import * as multer from 'multer';
 
 @Module({
   imports: [
